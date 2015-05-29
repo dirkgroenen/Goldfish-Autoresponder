@@ -112,4 +112,4 @@ rcmail_config['plugins'] = array('pluginx', 'autoreply');
 Open the ``config.inc.php`` file and change the database connection string so it matchs your setup. 
 
 # Credits
-Goldfish is originally created by [Remo Fritzsche](http://remofritzsche.com/), but now available for download anymore.
+Goldfish is originally created by [Remo Fritzsche](http://remofritzsche.com/), but not available for download anymore.
