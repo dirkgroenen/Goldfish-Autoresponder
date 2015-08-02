@@ -105,7 +105,7 @@ The plugin in this repository is compatible with every Roundcube version.
 Download this repository and move the ``autoreply`` directory (located in ``roundcube``) to your Roundcube plugins directory. Open the Roundcube config file (``config/main.inc.php``) and add ``autoreply`` to the plugin array.
 
 ```php
-rcmail_config['plugins'] = array('pluginx', 'autoreply');
+$rcmail_config['plugins'] = array('pluginx', 'autoreply');
 ```
 
 ## Configuration
