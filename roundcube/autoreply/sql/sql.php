@@ -6,7 +6,7 @@
  *
  * @version 2.0
  *
- * Author(s): Yevgen Sklyar, David Müller (Incloud)
+ * Author(s): Yevgen Sklyar, David MÃ¼ller (Incloud), Lukasz Biegaj (Unity)
  * Date: March 16, 2011
  * License: GPL
  * www.eugenesklyar.com, www.incloud.de
@@ -32,7 +32,7 @@ function autoreply_get()
         elseif (!is_array($dsn) && !preg_match('/\?new_link=true/', $dsn)) {
             $dsn .= '?new_link=true';
 
-            if(class_exists('rcube_mdb2'){
+            if(class_exists('rcube_mdb2')){
                 $db = new rcube_mdb2($dsn, '', FALSE);
             }
             else{
@@ -96,7 +96,7 @@ function autoreply_save($prefilled, $from, $to, $subject, $message, $enabled)
         elseif (!is_array($dsn) && !preg_match('/\?new_link=true/', $dsn)) {
             $dsn .= '?new_link=true';
             
-            if(class_exists('rcube_mdb2'){
+            if(class_exists('rcube_mdb2')){
                 $db = new rcube_mdb2($dsn, '', FALSE);
             }
             else{
