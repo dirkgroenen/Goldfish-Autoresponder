@@ -78,15 +78,15 @@ MYSQL_DATABASE=""
 
 In some cases you also need to change the MySQL queries to match your mail setup. 
 
+After configuration you set the execute permissions
+```BASH
+chmod a+x /usr/local/goldfish/goldfish.sh
+```
+
 After you have configured Goldfish you need to enable it via a cronjob. In my case I want Goldfish to be executed every 5 minutes:
 
 ```BASH
 */5 * * * * /usr/local/goldfish/goldfish.sh
-```
-
-At last set permissions
-```BASH
-chmod a+x /usr/local/goldfish/goldfish.sh
 ```
 
 # Creating an autoresponder
