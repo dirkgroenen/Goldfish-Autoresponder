@@ -1,5 +1,7 @@
 # Goldfish autoresponder
-Goldfish is a simple autoresponder script (written in PHP) for Postfix. It consists of only one PHP file which can be started through a cronjob. It works with a Postfix, Courier, MySQL and Virtual Users setup. It cannot be used with setups that don't make use of a database to store the mail accounts.
+Goldfish is a simple autoresponder script for Postfix. It consists of only one file which can be started through a cronjob. It works with a Postfix, Courier, MySQL and Virtual Users setup. It cannot be used with setups that don't make use of a database to store the mail accounts.
+
+This script is in PHP and BASH available.
 
 There also a plugin for Roundcube available so your users can create their own Auto reply messages.
 
@@ -35,6 +37,8 @@ rm -r /usr/local/goldfish/Goldfish-Autoresponder-master
 
 After you have downloaded and extracted the script you have to open it and fill in your database credentials.
 
+### PHP
+
 ```bash
 nano /usr/local/goldfish/goldfish.php
 ```
@@ -54,6 +58,35 @@ After you have configured Goldfish you need to enable it via a cronjob. In my ca
 
 ```
 */5 * * * * /usr/local/goldfish/goldfish.php
+```
+
+### BASH
+
+```BASH
+nano /usr/local/goldfish/goldfish.sh
+```
+
+In this file you have to change the configuration values so they match with your setup. 
+
+```BASH
+MYSQL_HOST="localhost"
+MYSQL_PORT=3306
+MYSQL_USER="root"
+MYSQL_PASS=""
+MYSQL_DATABASE=""
+```
+
+In some cases you also need to change the MySQL queries to match your mail setup. 
+
+After you have configured Goldfish you need to enable it via a cronjob. In my case I want Goldfish to be executed every 5 minutes:
+
+```BASH
+*/5 * * * * /usr/local/goldfish/goldfish.sh
+```
+
+At last set permissions
+```BASH
+chmod a+x /usr/local/goldfish/goldfish.sh
 ```
 
 # Creating an autoresponder
