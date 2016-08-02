@@ -9,7 +9,7 @@ $labels['from'] = 'De (eg. %s)';
 $labels['to'] = 'À (eg. %s)';
 $labels['subject'] = 'Sujet';
 $labels['msg'] = 'Message';
-$labels['user_dateformat'] = 'A-m-j';
+$labels['user_dateformat'] = 'Y-m-d';
 
 // Messages used for the different portions of the plugin
 $messages = array();
