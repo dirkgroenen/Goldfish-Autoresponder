@@ -8,6 +8,7 @@
     (c) 2009 Karl Herrick (Bugfix)
     (c) 2007-2008 Manuel Aller (Additional programming)
     (c) 2015 Dirk Groenen (Additional programming)
+    (c) 2016 Jaap Jansma (Changed mysql_ functions to mysqli_ functions which was needed for php7 compatibility)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -81,6 +82,20 @@
     #
     ############################################################################
 
+
+    # Replacement of the mysql_result function to a mysqli variant.
+    function mysqli_result($result,$row,$field) { 	    
+        if($result->num_rows==0) {
+	    return false;
+	}
+	$result->data_seek($row);
+	$ceva=$result->fetch_assoc(); 
+	$rasp=$ceva[$field]; 
+	return $rasp; 
+    }
+
+
+
     ######################################
     # Logger class #
     ######################################
@@ -147,7 +162,7 @@
     ######################################
     # Database connection #
     ######################################
-    $link = @mysql_connect($conf['mysql_host'], $conf['mysql_user'], $conf['mysql_password']);
+    $link = @mysqli_connect($conf['mysql_host'], $conf['mysql_user'], $conf['mysql_password']);
     if (!$link)
     {
 		$log->addLine("Could not connect to database. Abborting.");
@@ -157,7 +172,7 @@
     {
 		$log->addLine("Connection to database established successfully");
 		
-		if (!mysql_select_db($conf['mysql_database']))
+		if (!mysqli_select_db($link, $conf['mysql_database']))
 		{
 	    	$log->addLine("Could not select database ".$conf['mysql_database']);
 	    	endup($log, $conf);
@@ -171,22 +186,22 @@
     ######################################
     # Update database entries #
     ######################################
-    $result = mysql_query($conf['q_disable_forwarding']);
+    $result = mysqli_query($link, $conf['q_disable_forwarding']);
     
     if (!$result)
     {
-		$log->addLine("Error in query ".$conf['q_disable_forwarding']."\n".mysql_error());
+		$log->addLine("Error in query ".$conf['q_disable_forwarding']."\n".mysqli_error($link));
     }
     else
     {
 		$log->addLine("Successfully updated database (disabled entries)");
     }
     
-    mysql_query($conf['q_enable_forwarding']);
+    mysqli_query($link, $conf['q_enable_forwarding']);
     
     if (!$result)
     {
-		$log->addLine("Error in query ".$conf['q_enable_forwarding']."\n".mysql_error());
+		$log->addLine("Error in query ".$conf['q_enable_forwarding']."\n".mysqli_error($link));
     }
     else
     {
@@ -198,37 +213,37 @@
     ######################################
     
     // Corresponding email addresses
-    $result = mysql_query($conf['q_forwardings']);
+    $result = mysqli_query($link, $conf['q_forwardings']);
     
     if (!$result)
     {
-    	$log->addLine("Error in query ".$conf['q_forwardings']."\n".mysql_error());
+    	$log->addLine("Error in query ".$conf['q_forwardings']."\n".mysqli_error($link));
     	exit;
     }
    
-    $num = mysql_num_rows($result);
+    $num = mysqli_num_rows($result);
     
     for ($i = 0; $i < $num; $i++)
     {
-		$emails[] = mysql_result($result, $i, "email");
-		$name[] = mysql_result($result, $i, "descname");
+		$emails[] = mysqli_result($result, $i, "email");
+		$name[] = mysqli_result($result, $i, "descname");
     }
     
     // Fetching directories
     for ($i = 0; $i < $num; $i++)
     {
-		$result = mysql_query(str_replace("%m", $emails[$i], $conf['q_mailbox_path']));
+		$result = mysqli_query($link, str_replace("%m", $emails[$i], $conf['q_mailbox_path']));
 		
 		if (!$result)
 		{
-	    	$log->addLine("Error in query ".$conf['q_mailbox_path']."\n".mysql_error()); exit;
+	    	$log->addLine("Error in query ".$conf['q_mailbox_path']."\n".mysqli_error($link)); exit;
 		}
 		else
 		{
 	    	$log->addLine("Successfully fetched maildir directories");
 		}
 	
-		$paths[] = mysql_result($result, 0, 'path') . 'new/';
+		$paths[] = mysqli_result($result, 0, 'path') . 'new/';
     }
     
     ######################################
@@ -293,32 +308,32 @@
 				   			$email = $emails[$i];
 				    
 				    		// Get subject
-				    		$result = mysql_query(str_replace("%m", $emails[$i], $conf['q_subject']));
+				    		$result = mysqli_query($link, str_replace("%m", $emails[$i], $conf['q_subject']));
 				    
 				    		if (!$result)
 				    		{
-								$log->addLine("Error in query ".$conf['q_subject']."\n".mysql_error()); exit;
+								$log->addLine("Error in query ".$conf['q_subject']."\n".mysqli_error($link)); exit;
 				    		}
 				    		else
 				    		{
 								$log->addLine("Successfully fetched subject of {$emails[$i]}");
 				    		}
 		
-				    		$subject = mysql_result($result, 0, 'subject');
+				    		$subject = mysqli_result($result, 0, 'subject');
 	
 				    		// Get Message
-				    		$result = mysql_query(str_replace("%m", $emails[$i], $conf['q_messages']));
+				    		$result = mysqli_query($link, str_replace("%m", $emails[$i], $conf['q_messages']));
 				    		
 				    		if (!$result)
 				    		{
-								$log->addLine("Error in query ".$conf['q_messages']."\n".mysql_error()); exit;
+								$log->addLine("Error in query ".$conf['q_messages']."\n".mysqli_error($link)); exit;
 				    		}
 				    		else
 				    		{
 								$log->addLine("Successfully fetched message of {$emails[$i]}");
 				    		}
 				    
-				    		$message = mysql_result($result, 0, 'message');
+				    		$message = mysqli_result($result, 0, 'message');
 	
 				    		$headers = "From: ".$name[$i]."<".$emails[$i].">";
 	
