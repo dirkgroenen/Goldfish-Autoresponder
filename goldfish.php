@@ -263,7 +263,11 @@
     					foreach ($mail as $line)
     					{
         					$line = trim($line);
-            					
+
+        					// prevent respond to newsletter with no reply address  
+            				if (stristr($line, 'noreply') || stristr($line, 'no_reply'))
+								continue;      					
+        					
     						if (substr($line, 0, 12) == 'Return-Path:')
         					{
             					$returnpath = substr($line, strpos($line, '<') + 1, strpos($line, '>') - strpos($line, '<')-1)."\n";
