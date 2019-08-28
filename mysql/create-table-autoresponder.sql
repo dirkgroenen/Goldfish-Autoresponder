@@ -8,4 +8,4 @@ CREATE TABLE `autoresponder` (
     `subject` varchar(255) NOT NULL default '',
     PRIMARY KEY (`email`),
     FULLTEXT KEY `message` (`message`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
